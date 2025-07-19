@@ -5,8 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import GoogleMap from "@/components/GoogleMap";
 
 const ContactSection = () => {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -38,34 +41,34 @@ const ContactSection = () => {
   const contactInfo = [
     {
       icon: MessageCircle,
-      title: "WhatsApp 7j/7",
+      title: t('contact.whatsapp247'),
       value: "+212 6 61 202 213",
-      description: "Assistance instantanée",
+      description: t('contact.instantHelp'),
       action: handleWhatsAppContact,
       primary: true
     },
     {
       icon: Phone,
-      title: "Téléphone",
+      title: t('contact.phone'),
       value: "0661 202 213",
-      description: "Appel direct",
+      description: t('contact.directCall'),
       action: handlePhoneCall,
       primary: false
     },
     {
       icon: Mail,
-      title: "Email",
-      value: "plutonium.ride.car@gmail.com",
-      description: "Réponse sous 24h",
-      action: () => window.open("mailto:plutonium.ride.car@gmail.com"),
+      title: t('contact.email'),
+      value: "platinium.ride.car@gmail.com",
+      description: t('contact.response24h'),
+      action: () => window.open("mailto:platinium.ride.car@gmail.com"),
       primary: false
     },
     {
       icon: MapPin,
-      title: "Localisation",
+      title: t('contact.location'),
       value: "Casablanca, Maroc",
-      description: "Livraison dans toute la ville",
-      action: () => {},
+      description: t('contact.cityDelivery'),
+      action: () => window.open("https://maps.app.goo.gl/qGCb7DseduoBMYX69?g_st=ac"),
       primary: false
     }
   ];
@@ -75,20 +78,19 @@ const ContactSection = () => {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
-          <Badge className="mb-4" variant="secondary">Contact</Badge>
+          <Badge className="mb-4" variant="secondary">{t('nav.contact')}</Badge>
           <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-            Réservez votre voiture à <span className="text-accent">Casablanca</span>
+            {t('contact.title')}
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Contactez Platinium Ride Car pour réserver votre véhicule. Notre équipe est disponible 7j/7 
-            pour vous accompagner dans votre location de voiture à Casablanca.
+            {t('contact.subtitle')}
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Contact Information */}
           <div>
-            <h3 className="text-2xl font-bold mb-8">Nous contacter</h3>
+            <h3 className="text-2xl font-bold mb-8">{t('nav.contact')}</h3>
             
             <div className="space-y-6 mb-8">
               {contactInfo.map((info, index) => {
@@ -125,35 +127,41 @@ const ContactSection = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Clock className="w-5 h-5 text-accent" />
-                  Horaires de service
+                  {t('contact.hours')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span>Lundi - Dimanche</span>
+                    <span>{t('contact.monToSun')}</span>
                     <span className="font-medium">24h/24</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Support WhatsApp</span>
+                    <span>{t('contact.support')}</span>
                     <span className="font-medium text-accent">7j/7</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Livraison véhicules</span>
+                    <span>{t('contact.vehicleDelivery')}</span>
                     <span className="font-medium">6h - 23h</span>
                   </div>
                 </div>
               </CardContent>
             </Card>
+
+            {/* Google Map */}
+            <div className="mt-8">
+              <h4 className="text-xl font-bold mb-4">{t('contact.location')}</h4>
+              <GoogleMap />
+            </div>
           </div>
 
           {/* Contact Form */}
           <div>
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl">Demande de renseignements</CardTitle>
+                <CardTitle className="text-2xl">{t('contact.form.title')}</CardTitle>
                 <p className="text-muted-foreground">
-                  Remplissez ce formulaire et nous vous répondrons rapidement sur WhatsApp
+                  {t('contact.form.subtitle')}
                 </p>
               </CardHeader>
               <CardContent>
@@ -161,7 +169,7 @@ const ContactSection = () => {
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium mb-2">
-                        Nom complet *
+                        {t('contact.form.name')} *
                       </label>
                       <Input
                         id="name"
@@ -170,12 +178,12 @@ const ContactSection = () => {
                         required
                         value={formData.name}
                         onChange={handleInputChange}
-                        placeholder="Votre nom"
+                        placeholder={t('contact.form.placeholder.name')}
                       />
                     </div>
                     <div>
                       <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                        Téléphone *
+                        {t('contact.form.phone')} *
                       </label>
                       <Input
                         id="phone"
@@ -184,14 +192,14 @@ const ContactSection = () => {
                         required
                         value={formData.phone}
                         onChange={handleInputChange}
-                        placeholder="+212 6XX XXX XXX"
+                        placeholder={t('contact.form.placeholder.phone')}
                       />
                     </div>
                   </div>
 
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium mb-2">
-                      Email
+                      {t('contact.form.email')}
                     </label>
                     <Input
                       id="email"
@@ -199,13 +207,13 @@ const ContactSection = () => {
                       type="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      placeholder="votre@email.com"
+                      placeholder={t('contact.form.placeholder.email')}
                     />
                   </div>
 
                   <div>
                     <label htmlFor="message" className="block text-sm font-medium mb-2">
-                      Message *
+                      {t('contact.form.message')} *
                     </label>
                     <Textarea
                       id="message"
@@ -213,7 +221,7 @@ const ContactSection = () => {
                       required
                       value={formData.message}
                       onChange={handleInputChange}
-                      placeholder="Précisez vos besoins : type de véhicule, dates, lieu de livraison..."
+                      placeholder={t('contact.form.placeholder.message')}
                       rows={4}
                     />
                   </div>
@@ -224,14 +232,13 @@ const ContactSection = () => {
                     size="lg"
                   >
                     <Send className="w-5 h-5 mr-2" />
-                    Envoyer sur WhatsApp
+                    {t('contact.form.send')}
                   </Button>
                 </form>
 
                 <div className="mt-6 p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground text-center">
-                    En soumettant ce formulaire, vous serez redirigé vers WhatsApp pour finaliser votre demande. 
-                    Réponse garantie sous 30 minutes pendant les heures d'ouverture.
+                    {t('contact.form.notice')}
                   </p>
                 </div>
               </CardContent>
@@ -242,9 +249,9 @@ const ContactSection = () => {
         {/* Bottom CTA */}
         <div className="text-center mt-16">
           <div className="bg-primary text-primary-foreground p-8 rounded-2xl max-w-4xl mx-auto">
-            <h3 className="text-2xl font-bold mb-4">Besoin d'une réservation urgente ?</h3>
+            <h3 className="text-2xl font-bold mb-4">{t('contact.urgentBooking')}</h3>
             <p className="text-lg mb-6 opacity-90">
-              Contactez-nous directement sur WhatsApp pour une réponse immédiate et une réservation express.
+              {t('contact.urgentText')}
             </p>
             <Button 
               onClick={handleWhatsAppContact}
@@ -252,7 +259,7 @@ const ContactSection = () => {
               className="bg-accent hover:bg-accent/90 text-accent-foreground"
             >
               <MessageCircle className="w-5 h-5 mr-2" />
-              WhatsApp : Réservation Express
+              {t('contact.expressBooking')}
             </Button>
           </div>
         </div>

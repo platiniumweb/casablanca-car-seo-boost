@@ -109,4 +109,17 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+
+  /* RTL Support for Arabic */
+  .rtl {
+    direction: rtl;
+  }
+
+  .rtl .grid {
+    direction: ltr;
+  }
+
+  .rtl .flex {
+    direction: ltr;
+  }
 }

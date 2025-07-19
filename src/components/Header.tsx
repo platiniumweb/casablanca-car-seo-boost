@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Menu, X, Phone, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import LanguageSelector from "@/components/LanguageSelector";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { t } = useLanguage();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -15,12 +18,14 @@ const Header = () => {
     <header className="bg-primary text-primary-foreground shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
-              <span className="text-accent-foreground font-bold text-lg">P</span>
-            </div>
-            <div>
+          {/* Logo with Brand Image */}
+          <div className="flex items-center space-x-3">
+            <img 
+              src="/lovable-uploads/be62d16e-4a6f-4f53-b55a-d0a1e39d173d.png" 
+              alt="Platinium Ride Car Logo" 
+              className="h-12 w-auto object-contain"
+            />
+            <div className="hidden md:block">
               <h1 className="text-xl font-bold">Platinium Ride Car</h1>
               <p className="text-xs opacity-80">Location voiture Casablanca</p>
             </div>
@@ -28,15 +33,16 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#accueil" className="hover:text-accent transition-colors">Accueil</a>
-            <a href="#vehicules" className="hover:text-accent transition-colors">Nos Véhicules</a>
-            <a href="#services" className="hover:text-accent transition-colors">Services</a>
-            <a href="#avis" className="hover:text-accent transition-colors">Avis</a>
-            <a href="#contact" className="hover:text-accent transition-colors">Contact</a>
+            <a href="#accueil" className="hover:text-accent transition-colors">{t('nav.home')}</a>
+            <a href="#vehicules" className="hover:text-accent transition-colors">{t('nav.vehicles')}</a>
+            <a href="#services" className="hover:text-accent transition-colors">{t('nav.services')}</a>
+            <a href="#avis" className="hover:text-accent transition-colors">{t('nav.testimonials')}</a>
+            <a href="#contact" className="hover:text-accent transition-colors">{t('nav.contact')}</a>
           </nav>
 
           {/* Desktop CTA Buttons */}
           <div className="hidden md:flex items-center space-x-3">
+            <LanguageSelector />
             <Button 
               variant="outline" 
               size="sm"
@@ -68,11 +74,14 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-primary-foreground/20">
             <nav className="flex flex-col space-y-4">
-              <a href="#accueil" className="hover:text-accent transition-colors">Accueil</a>
-              <a href="#vehicules" className="hover:text-accent transition-colors">Nos Véhicules</a>
-              <a href="#services" className="hover:text-accent transition-colors">Services</a>
-              <a href="#avis" className="hover:text-accent transition-colors">Avis</a>
-              <a href="#contact" className="hover:text-accent transition-colors">Contact</a>
+              <div className="flex justify-center mb-4">
+                <LanguageSelector />
+              </div>
+              <a href="#accueil" className="hover:text-accent transition-colors">{t('nav.home')}</a>
+              <a href="#vehicules" className="hover:text-accent transition-colors">{t('nav.vehicles')}</a>
+              <a href="#services" className="hover:text-accent transition-colors">{t('nav.services')}</a>
+              <a href="#avis" className="hover:text-accent transition-colors">{t('nav.testimonials')}</a>
+              <a href="#contact" className="hover:text-accent transition-colors">{t('nav.contact')}</a>
               <div className="flex flex-col space-y-2 pt-4">
                 <Button 
                   variant="outline" 
