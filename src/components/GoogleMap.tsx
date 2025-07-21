@@ -33,12 +33,12 @@ const GoogleMap = () => {
 
     const initializeMap = () => {
       if (mapRef.current && !mapInstanceRef.current) {
-        // Coordonnées de Casablanca (approximatives)
-        const casablancaLocation = { lat: 33.5731, lng: -7.5898 };
+        // Coordonnées exactes : Sidi Abderrahmane, Rue 27 N°11, El Oulfa, Casablanca
+        const platiniumLocation = { lat: 33.55959, lng: -7.65030 };
 
         mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
-          zoom: 11,
-          center: casablancaLocation,
+          zoom: 17,
+          center: platiniumLocation,
           styles: [
             {
               "featureType": "all",
@@ -140,8 +140,8 @@ const GoogleMap = () => {
         });
 
         // Ajouter un marqueur pour Platinium Ride Car
-        new window.google.maps.Marker({
-          position: casablancaLocation,
+        const marker = new window.google.maps.Marker({
+          position: platiniumLocation,
           map: mapInstanceRef.current,
           title: 'Platinium Ride Car - Location de voiture à Casablanca',
           icon: {
@@ -150,26 +150,22 @@ const GoogleMap = () => {
           }
         });
 
-        // Ajouter une info window
+        // Ajouter une info window avec l'adresse exacte
         const infoWindow = new window.google.maps.InfoWindow({
           content: `
-            <div style="padding: 10px; max-width: 250px;">
+            <div style="padding: 10px; max-width: 300px;">
               <h3 style="margin: 0 0 10px 0; color: #1e3a8a;">Platinium Ride Car</h3>
-              <p style="margin: 0 0 8px 0; font-size: 14px;">Location de voiture à Casablanca</p>
+              <p style="margin: 0 0 8px 0; font-size: 14px;"><strong>📍 Adresse:</strong><br>
+                Sidi Abderrahmane, Rue 27 N°11<br>
+                Quartier El Oulfa, Casablanca, Maroc</p>
               <p style="margin: 0 0 8px 0; font-size: 12px;"><strong>📞 Tel:</strong> 0661 202 213</p>
-              <p style="margin: 0 0 8px 0; font-size: 12px;"><strong>📧 Email:</strong> platinium.ride.car@gmail.com</p>
+              <p style="margin: 0 0 8px 0; font-size: 12px;"><strong>📧 Email:</strong> platinium.ride.web@gmail.com</p>
               <p style="margin: 0; font-size: 12px;"><strong>⏰ Service:</strong> 7j/7 - 24h/24</p>
             </div>
           `
         });
 
         // Ouvrir l'info window au clic sur le marqueur
-        const marker = new window.google.maps.Marker({
-          position: casablancaLocation,
-          map: mapInstanceRef.current,
-          title: 'Platinium Ride Car'
-        });
-
         marker.addListener('click', () => {
           infoWindow.open(mapInstanceRef.current, marker);
         });

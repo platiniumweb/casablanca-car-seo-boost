@@ -58,15 +58,15 @@ const ContactSection = () => {
     {
       icon: Mail,
       title: t('contact.email'),
-      value: "platinium.ride.car@gmail.com",
+      value: "platinium.ride.web@gmail.com",
       description: t('contact.response24h'),
-      action: () => window.open("mailto:platinium.ride.car@gmail.com"),
+      action: () => window.open("mailto:platinium.ride.web@gmail.com"),
       primary: false
     },
     {
       icon: MapPin,
       title: t('contact.location'),
-      value: "Casablanca, Maroc",
+      value: "Sidi Abderrahmane, Rue 27 N°11, El Oulfa, Casablanca",
       description: t('contact.cityDelivery'),
       action: () => window.open("https://maps.app.goo.gl/qGCb7DseduoBMYX69?g_st=ac"),
       primary: false
