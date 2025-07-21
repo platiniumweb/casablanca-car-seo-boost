@@ -1,3 +1,4 @@
+
 import { Car, Users, Fuel, MapPin, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,8 +9,8 @@ const VehicleSection = () => {
     {
       id: 1,
       category: "Économique",
-      name: "Dacia Logan / Sandero",
-      image: "/api/placeholder/400/250",
+      name: "Dacia Sandero",
+      image: "/lovable-uploads/89e0f81d-8ddb-40ef-9049-ff38bdee096c.png",
       dailyPriceDH: 300,
       dailyPriceEUR: 30,
       weeklyPriceDH: 1800,
@@ -25,7 +26,7 @@ const VehicleSection = () => {
       id: 2,
       category: "SUV",
       name: "Dacia Duster 4x4",
-      image: "/api/placeholder/400/250",
+      image: "/lovable-uploads/c1a7dd5f-f93d-4c97-9ee0-b83dd14bab6c.png",
       dailyPriceDH: 500,
       dailyPriceEUR: 50,
       weeklyPriceDH: 3000,
@@ -40,8 +41,8 @@ const VehicleSection = () => {
     {
       id: 3,
       category: "Luxe",
-      name: "BMW Série 3 / Mercedes Classe C",
-      image: "/api/placeholder/400/250",
+      name: "BMW Série 3",
+      image: "/lovable-uploads/df107e53-c1e6-48ff-a564-c1b540445fbe.png",
       dailyPriceDH: 800,
       dailyPriceEUR: 80,
       weeklyPriceDH: 5000,
@@ -57,7 +58,7 @@ const VehicleSection = () => {
       id: 4,
       category: "Familial",
       name: "Dacia Lodgy 7 places",
-      image: "/api/placeholder/400/250",
+      image: "/lovable-uploads/15cd9717-848d-4496-8fca-c53bb86c3129.png",
       dailyPriceDH: 450,
       dailyPriceEUR: 45,
       weeklyPriceDH: 2700,
@@ -159,6 +160,17 @@ const VehicleSection = () => {
                   <div className="flex justify-between items-center text-sm">
                     <span>Prix mensuel</span>
                     <span className="font-semibold text-accent">{vehicle.monthlyPriceDH} DH ({vehicle.monthlyPriceEUR}€)</span>
+                  </div>
+                </div>
+
+                {/* Payment Options */}
+                <div className="mb-6 p-3 bg-accent/10 rounded-lg">
+                  <h4 className="font-semibold mb-2 text-sm">Paiement accepté :</h4>
+                  <div className="flex flex-wrap gap-2 text-xs">
+                    <Badge variant="outline">Western Union</Badge>
+                    <Badge variant="outline">Wafa Cash</Badge>
+                    <Badge variant="outline">MoneyGram</Badge>
+                    <Badge variant="outline">Espèces</Badge>
                   </div>
                 </div>
 
