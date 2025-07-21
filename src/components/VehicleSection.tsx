@@ -1,5 +1,5 @@
 
-import { Car, Users, Fuel, MapPin, MessageCircle } from "lucide-react";
+import { Car, Users, Fuel, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -174,20 +174,14 @@ const VehicleSection = () => {
                   </div>
                 </div>
 
-                {/* CTA Buttons */}
-                <div className="space-y-3">
-                  <Button 
-                    onClick={() => handleWhatsAppReservation(vehicle.name)}
-                    className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
-                  >
-                    <MessageCircle className="w-4 h-4 mr-2" />
-                    Réserver sur WhatsApp
-                  </Button>
-                  <Button variant="outline" className="w-full">
-                    <MapPin className="w-4 h-4 mr-2" />
-                    Voir disponibilité
-                  </Button>
-                </div>
+                {/* CTA Button */}
+                <Button 
+                  onClick={() => handleWhatsAppReservation(vehicle.name)}
+                  className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
+                >
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Réserver sur WhatsApp
+                </Button>
               </CardContent>
             </Card>
           ))}
