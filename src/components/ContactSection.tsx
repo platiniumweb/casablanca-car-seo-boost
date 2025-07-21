@@ -1,37 +1,16 @@
-import { MessageCircle, Phone, Mail, MapPin, Clock, Send } from "lucide-react";
+
+import { MessageCircle, Phone, Mail, MapPin, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import GoogleMap from "@/components/GoogleMap";
+import OpenStreetMap from "@/components/OpenStreetMap";
 
 const ContactSection = () => {
   const { t } = useLanguage();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
-  });
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
 
   const handleWhatsAppContact = () => {
     window.open("https://wa.me/212661202213?text=Bonjour, je souhaite obtenir des informations sur vos services de location de voiture à Casablanca", "_blank");
-  };
-
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const message = `Bonjour, je suis ${formData.name}. Email: ${formData.email}. Téléphone: ${formData.phone}. Message: ${formData.message}`;
-    window.open(`https://wa.me/212661202213?text=${encodeURIComponent(message)}`, "_blank");
   };
 
   const handlePhoneCall = () => {
@@ -68,7 +47,7 @@ const ContactSection = () => {
       title: t('contact.location'),
       value: "Sidi Abderrahmane, Rue 27 N°11, El Oulfa, Casablanca",
       description: t('contact.cityDelivery'),
-      action: () => window.open("https://maps.app.goo.gl/qGCb7DseduoBMYX69?g_st=ac"),
+      action: () => window.open("https://www.openstreetmap.org/?mlat=33.55959&mlon=-7.65030#map=19/33.55959/-7.65030"),
       primary: false
     }
   ];
@@ -87,12 +66,12 @@ const ContactSection = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-1 gap-12 max-w-4xl mx-auto">
           {/* Contact Information */}
           <div>
-            <h3 className="text-2xl font-bold mb-8">{t('nav.contact')}</h3>
+            <h3 className="text-2xl font-bold mb-8 text-center">{t('nav.contact')}</h3>
             
-            <div className="space-y-6 mb-8">
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
               {contactInfo.map((info, index) => {
                 const IconComponent = info.icon;
                 return (
@@ -123,9 +102,9 @@ const ContactSection = () => {
             </div>
 
             {/* Hours */}
-            <Card>
+            <Card className="mb-8">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 justify-center">
                   <Clock className="w-5 h-5 text-accent" />
                   {t('contact.hours')}
                 </CardTitle>
@@ -148,101 +127,11 @@ const ContactSection = () => {
               </CardContent>
             </Card>
 
-            {/* Google Map */}
-            <div className="mt-8">
-              <h4 className="text-xl font-bold mb-4">{t('contact.location')}</h4>
-              <GoogleMap />
+            {/* OpenStreetMap */}
+            <div className="mb-8">
+              <h4 className="text-xl font-bold mb-4 text-center">{t('contact.location')}</h4>
+              <OpenStreetMap />
             </div>
-          </div>
-
-          {/* Contact Form */}
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-2xl">{t('contact.form.title')}</CardTitle>
-                <p className="text-muted-foreground">
-                  {t('contact.form.subtitle')}
-                </p>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleFormSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium mb-2">
-                        {t('contact.form.name')} *
-                      </label>
-                      <Input
-                        id="name"
-                        name="name"
-                        type="text"
-                        required
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        placeholder={t('contact.form.placeholder.name')}
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                        {t('contact.form.phone')} *
-                      </label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        required
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        placeholder={t('contact.form.placeholder.phone')}
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium mb-2">
-                      {t('contact.form.email')}
-                    </label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      placeholder={t('contact.form.placeholder.email')}
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium mb-2">
-                      {t('contact.form.message')} *
-                    </label>
-                    <Textarea
-                      id="message"
-                      name="message"
-                      required
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      placeholder={t('contact.form.placeholder.message')}
-                      rows={4}
-                    />
-                  </div>
-
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
-                    size="lg"
-                  >
-                    <Send className="w-5 h-5 mr-2" />
-                    {t('contact.form.send')}
-                  </Button>
-                </form>
-
-                <div className="mt-6 p-4 bg-muted rounded-lg">
-                  <p className="text-sm text-muted-foreground text-center">
-                    {t('contact.form.notice')}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
 
