@@ -13,7 +13,7 @@ const Header = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      setScrolled(scrollPosition > 20);
+      setScrolled(scrollPosition > 50);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -26,84 +26,97 @@ const Header = () => {
     window.open("https://wa.me/212661202213", "_blank");
   };
 
+  const navItems = [
+    { href: "#accueil", label: t('nav.home') },
+    { href: "#vehicules", label: t('nav.vehicles') },
+    { href: "#reservation", label: "Réservation" },
+    { href: "#services", label: t('nav.services') },
+    { href: "#avis", label: t('nav.testimonials') },
+    { href: "#contact", label: t('nav.contact') },
+  ];
+
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-500 ease-in-out ${
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
       scrolled 
-        ? 'bg-primary/70 backdrop-blur-lg shadow-lg border-b border-white/10' 
-        : 'bg-primary shadow-lg'
+        ? 'bg-black/90 backdrop-blur-xl shadow-2xl border-b border-red-500/20' 
+        : 'bg-gradient-to-r from-black via-gray-900 to-black shadow-lg'
     }`}>
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo with Brand Image - Enhanced visibility */}
-          <div className="flex items-center space-x-3 flex-shrink-0">
-            <div className="relative">
-              <div className="absolute inset-0 bg-white/20 rounded-xl blur-sm"></div>
+      <div className="container mx-auto px-4 lg:px-8">
+        <div className="flex items-center justify-between h-20 lg:h-24">
+          {/* Logo Section - Enhanced */}
+          <div className="flex items-center space-x-4 flex-shrink-0">
+            <div className="relative group">
+              <div className={`absolute inset-0 bg-gradient-to-r from-red-500/30 to-orange-500/30 rounded-2xl blur-lg transition-all duration-300 ${
+                scrolled ? 'opacity-60' : 'opacity-80'
+              } group-hover:opacity-100`}></div>
               <img 
-                src="/lovable-uploads/be62d16e-4a6f-4f53-b55a-d0a1e39d173d.png" 
+                src="/lovable-uploads/4bb512ef-31d0-4e0f-804b-339a71dba325.png" 
                 alt="Platinium Ride Car Logo" 
-                className={`relative h-14 w-14 md:h-18 md:w-18 object-contain rounded-xl shadow-xl transition-all duration-300 ${
-                  scrolled ? 'bg-white/30 p-2' : 'bg-white/20 p-2'
-                }`}
+                className={`relative h-16 w-auto lg:h-20 object-contain transition-all duration-300 ${
+                  scrolled ? 'filter brightness-110' : ''
+                } hover:scale-105`}
               />
             </div>
             <div className="hidden sm:block">
-              <h1 className={`text-lg md:text-2xl font-bold transition-all duration-300 ${
-                scrolled ? 'text-primary-foreground/90' : 'text-primary-foreground'
+              <h1 className={`text-xl lg:text-3xl font-bold bg-gradient-to-r from-red-400 via-red-300 to-orange-400 bg-clip-text text-transparent transition-all duration-300 ${
+                scrolled ? 'text-lg lg:text-2xl' : ''
               }`}>
                 Platinium Ride Car
               </h1>
-              <p className={`text-xs md:text-sm font-medium transition-all duration-300 ${
-                scrolled ? 'text-primary-foreground/70' : 'text-primary-foreground/90'
+              <p className={`text-sm lg:text-base font-medium text-gray-300 transition-all duration-300 ${
+                scrolled ? 'text-xs lg:text-sm opacity-80' : ''
               }`}>
                 Location voiture Casablanca
               </p>
             </div>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className={`hidden lg:flex items-center space-x-8 transition-all duration-300 ${
-            scrolled ? 'text-primary-foreground/90' : 'text-primary-foreground'
-          }`}>
-            <a href="#accueil" className="hover:text-accent transition-colors text-sm font-medium hover:scale-105 transform duration-200">{t('nav.home')}</a>
-            <a href="#vehicules" className="hover:text-accent transition-colors text-sm font-medium hover:scale-105 transform duration-200">{t('nav.vehicles')}</a>
-            <a href="#reservation" className="hover:text-accent transition-colors text-sm font-medium hover:scale-105 transform duration-200">Réservation</a>
-            <a href="#services" className="hover:text-accent transition-colors text-sm font-medium hover:scale-105 transform duration-200">{t('nav.services')}</a>
-            <a href="#avis" className="hover:text-accent transition-colors text-sm font-medium hover:scale-105 transform duration-200">{t('nav.testimonials')}</a>
-            <a href="#contact" className="hover:text-accent transition-colors text-sm font-medium hover:scale-105 transform duration-200">{t('nav.contact')}</a>
+          {/* Desktop Navigation - Modernized */}
+          <nav className={`hidden lg:flex items-center space-x-8 transition-all duration-300`}>
+            {navItems.map((item) => (
+              <a 
+                key={item.href}
+                href={item.href} 
+                className="relative group text-white hover:text-red-400 transition-all duration-300 text-sm font-medium py-2"
+              >
+                {item.label}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-red-500 to-orange-500 transition-all duration-300 group-hover:w-full"></span>
+              </a>
+            ))}
           </nav>
 
-          {/* Desktop CTA Buttons */}
+          {/* Desktop CTA Buttons - Enhanced */}
           <div className="hidden md:flex items-center space-x-3 flex-shrink-0">
             <LanguageSelector />
             <Button 
               variant="outline" 
               size="sm"
-              className={`border-accent text-accent hover:bg-accent hover:text-accent-foreground text-xs font-medium shadow-sm transition-all duration-300 ${
-                scrolled ? 'bg-white/10' : ''
+              className={`border-red-500/50 text-red-400 hover:bg-red-500/20 hover:text-red-300 text-xs font-medium shadow-lg transition-all duration-300 bg-black/30 backdrop-blur-sm ${
+                scrolled ? 'border-red-400/70 bg-black/50' : ''
               }`}
             >
-              <Phone className="w-3 h-3 mr-1" />
+              <Phone className="w-3 h-3 mr-2" />
               <span className="hidden lg:inline">06 61 202 213</span>
             </Button>
             <Button 
               onClick={handleWhatsApp}
-              className={`bg-accent hover:bg-accent/90 text-accent-foreground shadow-sm transition-all duration-300 ${
-                scrolled ? 'shadow-lg' : ''
+              className={`bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white shadow-lg transition-all duration-300 border border-red-500/30 ${
+                scrolled ? 'shadow-red-500/20' : 'shadow-red-500/30'
               }`}
               size="sm"
             >
-              <MessageCircle className="w-3 h-3 mr-1" />
+              <MessageCircle className="w-3 h-3 mr-2" />
               <span className="hidden lg:inline">WhatsApp</span>
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="flex items-center space-x-2 md:hidden">
+          {/* Mobile Menu Button - Enhanced */}
+          <div className="flex items-center space-x-3 md:hidden">
             <LanguageSelector />
             <button
               onClick={toggleMenu}
-              className={`p-2 hover:bg-primary/20 rounded-lg transition-all duration-300 ${
-                scrolled ? 'bg-white/10' : ''
+              className={`p-2 hover:bg-red-500/20 rounded-lg transition-all duration-300 text-white ${
+                scrolled ? 'bg-black/30' : ''
               }`}
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -111,30 +124,32 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - Enhanced */}
         {isMenuOpen && (
-          <div className={`md:hidden py-4 border-t border-primary-foreground/20 animate-fade-in transition-all duration-300 ${
-            scrolled ? 'bg-primary/80 backdrop-blur-sm' : ''
-          }`}>
-            <nav className="flex flex-col space-y-3">
-              <a href="#accueil" className="hover:text-accent transition-colors py-2 font-medium" onClick={toggleMenu}>{t('nav.home')}</a>
-              <a href="#vehicules" className="hover:text-accent transition-colors py-2 font-medium" onClick={toggleMenu}>{t('nav.vehicles')}</a>
-              <a href="#reservation" className="hover:text-accent transition-colors py-2 font-medium" onClick={toggleMenu}>Réservation</a>
-              <a href="#services" className="hover:text-accent transition-colors py-2 font-medium" onClick={toggleMenu}>{t('nav.services')}</a>
-              <a href="#avis" className="hover:text-accent transition-colors py-2 font-medium" onClick={toggleMenu}>{t('nav.testimonials')}</a>
-              <a href="#contact" className="hover:text-accent transition-colors py-2 font-medium" onClick={toggleMenu}>{t('nav.contact')}</a>
-              <div className="flex flex-col space-y-2 pt-4">
+          <div className={`md:hidden py-6 border-t border-red-500/20 animate-fade-in transition-all duration-300 bg-gradient-to-b from-black/95 to-gray-900/95 backdrop-blur-xl`}>
+            <nav className="flex flex-col space-y-4">
+              {navItems.map((item) => (
+                <a 
+                  key={item.href}
+                  href={item.href} 
+                  className="relative group text-white hover:text-red-400 transition-colors py-3 font-medium border-l-4 border-transparent hover:border-red-500 pl-4" 
+                  onClick={toggleMenu}
+                >
+                  {item.label}
+                </a>
+              ))}
+              <div className="flex flex-col space-y-3 pt-6 border-t border-red-500/20">
                 <Button 
                   variant="outline" 
                   size="sm"
-                  className="border-accent text-accent hover:bg-accent hover:text-accent-foreground"
+                  className="border-red-500/50 text-red-400 hover:bg-red-500/20 hover:text-red-300 bg-black/30"
                 >
                   <Phone className="w-4 h-4 mr-2" />
                   06 61 202 213
                 </Button>
                 <Button 
                   onClick={handleWhatsApp}
-                  className="bg-accent hover:bg-accent/90 text-accent-foreground"
+                  className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white shadow-lg"
                   size="sm"
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
