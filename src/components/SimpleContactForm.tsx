@@ -67,8 +67,8 @@ const SimpleContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      // URL de votre Google Apps Script (à remplacer par votre URL)
-      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+      // URL de déploiement Google Apps Script
+      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz4f0Ue2o18F7lVHolmNWn7uU1t_0UFHD1WGiqPFZMqm5K9qSks8YAdb8wHmvtjVh_j/exec';
       
       const indicatif = countryCodeMap[formData.pays as keyof typeof countryCodeMap] || '';
       const whatsappComplet = `${indicatif}${formData.whatsapp}`;
