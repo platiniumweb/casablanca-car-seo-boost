@@ -14,6 +14,7 @@ const SimpleContactForm = () => {
   const [formData, setFormData] = useState({
     nom: '',
     prenom: '',
+    email: '',
     whatsapp: '',
     pays: '',
     vehicule: '',
@@ -97,6 +98,7 @@ const SimpleContactForm = () => {
       setFormData({
         nom: '',
         prenom: '',
+        email: '',
         whatsapp: '',
         pays: '',
         vehicule: '',
@@ -125,6 +127,7 @@ const SimpleContactForm = () => {
     const message = `🚗 DEMANDE DE RÉSERVATION
 
 👤 Client: ${formData.prenom} ${formData.nom}
+📧 Email: ${formData.email}
 📱 WhatsApp: ${whatsappComplet}
 🌍 Pays: ${formData.pays}
 🚙 Véhicule: ${formData.vehicule}
@@ -147,7 +150,7 @@ const SimpleContactForm = () => {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <Label htmlFor="nom">Nom *</Label>
                   <Input
@@ -157,6 +160,7 @@ const SimpleContactForm = () => {
                     value={formData.nom}
                     onChange={handleInputChange}
                     placeholder="Votre nom"
+                    className="h-12"
                   />
                 </div>
                 <div>
@@ -168,15 +172,30 @@ const SimpleContactForm = () => {
                     value={formData.prenom}
                     onChange={handleInputChange}
                     placeholder="Votre prénom"
+                    className="h-12"
                   />
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="email">Email *</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="votre.email@example.com"
+                  className="h-12"
+                />
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <Label htmlFor="pays">Pays *</Label>
                   <Select value={formData.pays} onValueChange={(value) => handleSelectChange('pays', value)}>
-                    <SelectTrigger>
+                    <SelectTrigger className="h-12">
                       <SelectValue placeholder="Sélectionnez votre pays" />
                     </SelectTrigger>
                     <SelectContent>
@@ -191,7 +210,7 @@ const SimpleContactForm = () => {
                 <div>
                   <Label htmlFor="whatsapp">WhatsApp *</Label>
                   <div className="flex">
-                    <div className="flex items-center px-3 bg-muted rounded-l-md border border-r-0">
+                    <div className="flex items-center px-3 bg-muted rounded-l-md border border-r-0 h-12">
                       <span className="text-sm font-medium">
                         {countryCodeMap[formData.pays as keyof typeof countryCodeMap] || '+212'}
                       </span>
@@ -204,17 +223,17 @@ const SimpleContactForm = () => {
                       value={formData.whatsapp}
                       onChange={handleInputChange}
                       placeholder="661202213"
-                      className="rounded-l-none"
+                      className="rounded-l-none h-12"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-3">
                 <div>
                   <Label htmlFor="vehicule">Véhicule *</Label>
                   <Select value={formData.vehicule} onValueChange={(value) => handleSelectChange('vehicule', value)}>
-                    <SelectTrigger>
+                    <SelectTrigger className="h-12">
                       <SelectValue placeholder="Choisir un véhicule" />
                     </SelectTrigger>
                     <SelectContent>
@@ -235,6 +254,7 @@ const SimpleContactForm = () => {
                     required
                     value={formData.dateDebut}
                     onChange={handleInputChange}
+                    className="h-12"
                   />
                 </div>
                 <div>
@@ -246,6 +266,7 @@ const SimpleContactForm = () => {
                     required
                     value={formData.dateFin}
                     onChange={handleInputChange}
+                    className="h-12"
                   />
                 </div>
               </div>
@@ -253,7 +274,7 @@ const SimpleContactForm = () => {
               <div>
                 <Label htmlFor="transfert">Transfert souhaité</Label>
                 <Select value={formData.transfert} onValueChange={(value) => handleSelectChange('transfert', value)}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12">
                     <SelectValue placeholder="Sélectionnez un transfert" />
                   </SelectTrigger>
                   <SelectContent>
@@ -279,11 +300,11 @@ const SimpleContactForm = () => {
                 />
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="flex-1 bg-primary hover:bg-primary/90"
+                  className="flex-1 h-12 bg-primary hover:bg-primary/90"
                 >
                   <Send className="w-4 h-4 mr-2" />
                   {isSubmitting ? 'Envoi...' : 'Envoyer la demande'}
@@ -292,7 +313,7 @@ const SimpleContactForm = () => {
                 <Button 
                   type="button"
                   onClick={handleWhatsAppContact}
-                  className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground"
+                  className="flex-1 h-12 bg-accent hover:bg-accent/90 text-accent-foreground"
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
                   Contact WhatsApp
