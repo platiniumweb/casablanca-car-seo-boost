@@ -62,59 +62,150 @@ const SimpleContactForm = () => {
     });
   };
 
+  const validateForm = () => {
+    const requiredFields = ['nom', 'prenom', 'email', 'whatsapp', 'pays', 'vehicule', 'dateDebut', 'dateFin'];
+    const missingField = requiredFields.find(field => !formData[field as keyof typeof formData]?.trim());
+    
+    if (missingField) {
+      toast({
+        title: "Champ manquant",
+        description: `Veuillez remplir le champ: ${missingField}`,
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    // Validation email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast({
+        title: "Email invalide",
+        description: "Veuillez saisir une adresse email valide",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    // Validation dates
+    const startDate = new Date(formData.dateDebut);
+    const endDate = new Date(formData.dateFin);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (startDate < today) {
+      toast({
+        title: "Date invalide",
+        description: "La date de début ne peut pas être dans le passé",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    if (endDate <= startDate) {
+      toast({
+        title: "Dates invalides",
+        description: "La date de fin doit être après la date de début",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      // URL de déploiement Google Apps Script
+      // URL de déploiement Google Apps Script - REMPLACEZ PAR VOTRE URL
       const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz4f0Ue2o18F7lVHolmNWn7uU1t_0UFHD1WGiqPFZMqm5K9qSks8YAdb8wHmvtjVh_j/exec';
       
       const indicatif = countryCodeMap[formData.pays as keyof typeof countryCodeMap] || '';
       const whatsappComplet = `${indicatif}${formData.whatsapp}`;
       
       const dataToSend = {
-        ...formData,
+        nom: formData.nom.trim(),
+        prenom: formData.prenom.trim(),
+        email: formData.email.trim().toLowerCase(),
         whatsapp: whatsappComplet,
-        timestamp: new Date().toISOString(),
-        email: 'platinium.ride.web@gmail.com'
+        pays: formData.pays,
+        vehicule: formData.vehicule,
+        dateDebut: formData.dateDebut,
+        dateFin: formData.dateFin,
+        transfert: formData.transfert || 'Non spécifié',
+        message: formData.message.trim() || 'Aucun message additionnel'
       };
+
+      console.log('Envoi des données:', dataToSend);
 
       const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(dataToSend)
       });
 
-      toast({
-        title: "Demande envoyée !",
-        description: "Votre demande de réservation a été transmise. Nous vous contacterons rapidement.",
-      });
+      // Tenter de lire la réponse JSON
+      let result;
+      try {
+        const responseText = await response.text();
+        console.log('Réponse brute:', responseText);
+        result = JSON.parse(responseText);
+      } catch (parseError) {
+        console.warn('Impossible de parser la réponse JSON, mais requête envoyée');
+        result = { success: true }; // Considérer comme succès si pas d'erreur réseau
+      }
 
-      // Réinitialiser le formulaire
-      setFormData({
-        nom: '',
-        prenom: '',
-        email: '',
-        whatsapp: '',
-        pays: '',
-        vehicule: '',
-        dateDebut: '',
-        dateFin: '',
-        transfert: '',
-        message: ''
-      });
+      if (result.success !== false) {
+        toast({
+          title: "Réservation envoyée !",
+          description: "Votre demande a été transmise avec succès. Nous vous contacterons rapidement.",
+        });
+
+        // Réinitialiser le formulaire
+        setFormData({
+          nom: '',
+          prenom: '',
+          email: '',
+          whatsapp: '',
+          pays: '',
+          vehicule: '',
+          dateDebut: '',
+          dateFin: '',
+          transfert: '',
+          message: ''
+        });
+
+        // Scroll vers le haut pour voir le message
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      } else {
+        throw new Error(result.error || 'Erreur lors de l\'envoi');
+      }
 
     } catch (error) {
-      console.error('Erreur:', error);
+      console.error('Erreur envoi formulaire:', error);
+      
       toast({
-        title: "Erreur",
-        description: "Une erreur s'est produite. Veuillez réessayer ou nous contacter par WhatsApp.",
+        title: "Erreur d'envoi",
+        description: "Problème de connexion. Essayez le contact WhatsApp ou réessayez plus tard.",
         variant: "destructive",
       });
+
+      // Proposer automatiquement WhatsApp en cas d'erreur
+      setTimeout(() => {
+        if (window.confirm("Voulez-vous contacter directement par WhatsApp ?")) {
+          handleWhatsAppContact();
+        }
+      }, 2000);
+
     } finally {
       setIsSubmitting(false);
     }
