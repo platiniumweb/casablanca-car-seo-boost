@@ -1,13 +1,52 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Send, MessageCircle } from "lucide-react";
+import { Send, MessageCircle, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+
+// 🌍 CODES PAYS AVEC INDICATIFS
+const PAYS_OPTIONS = [
+  { value: 'Maroc', text: 'Maroc +212', code: '+212' },
+  { value: 'France', text: 'France +33', code: '+33' },
+  { value: 'Espagne', text: 'Espagne +34', code: '+34' },
+  { value: 'Belgique', text: 'Belgique +32', code: '+32' },
+  { value: 'Suisse', text: 'Suisse +41', code: '+41' },
+  { value: 'Canada', text: 'Canada +1', code: '+1' },
+  { value: 'Allemagne', text: 'Allemagne +49', code: '+49' },
+  { value: 'Italie', text: 'Italie +39', code: '+39' },
+  { value: 'Pays-Bas', text: 'Pays-Bas +31', code: '+31' },
+  { value: 'Royaume-Uni', text: 'Royaume-Uni +44', code: '+44' },
+  { value: 'Autre', text: 'Autre', code: '+212' }
+];
+
+// 🚙 OPTIONS DE VÉHICULES
+const VEHICULE_OPTIONS = [
+  { value: '', text: 'Choisir un véhicule' },
+  { value: 'Dacia Sandero', text: 'Dacia Sandero' },
+  { value: 'Dacia Duster 4x4', text: 'Dacia Duster 4x4' },
+  { value: 'BMW Série 3', text: 'BMW Série 3' },
+  { value: 'Dacia Lodgy 7 places', text: 'Dacia Lodgy 7 places' },
+  { value: 'Autre véhicule', text: 'Autre véhicule' }
+];
+
+// 🚌 OPTIONS DE TRANSFERT
+const TRANSFERT_OPTIONS = [
+  { value: '', text: 'Sélectionnez un transfert' },
+  { value: 'Aéroport Mohammed V', text: 'Aéroport Mohammed V' },
+  { value: 'Hôtel / Riad', text: 'Hôtel / Riad' },
+  { value: 'Domicile', text: 'Domicile' },
+  { value: 'Gare', text: 'Gare' },
+  { value: 'Autre lieu', text: 'Autre lieu' },
+  { value: 'Aucun transfert', text: 'Aucun transfert' }
+];
+
+// URL Google Apps Script
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz4f0Ue2o18F7lVHolmNWn7uU1t_0UFHD1WGiqPFZMqm5K9qSks8YAdb8wHmvtjVh_j/exec';
 
 const SimpleContactForm = () => {
   const { toast } = useToast();
@@ -26,33 +65,45 @@ const SimpleContactForm = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const countryCodeMap = {
-    'Maroc': '+212',
-    'France': '+33',
-    'Espagne': '+34',
-    'Belgique': '+32',
-    'Suisse': '+41',
-    'Canada': '+1',
-    'Allemagne': '+49',
-    'Italie': '+39',
-    'Pays-Bas': '+31',
-    'Royaume-Uni': '+44',
-    'Autre': ''
+  // 🔄 Configuration des dates minimum au chargement
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0];
+    const dateDebutInput = document.getElementById('dateDebut') as HTMLInputElement;
+    const dateFinInput = document.getElementById('dateFin') as HTMLInputElement;
+    
+    if (dateDebutInput) dateDebutInput.min = today;
+    if (dateFinInput) dateFinInput.min = today;
+  }, []);
+
+  // 🌍 Obtenir l'indicatif téléphonique du pays sélectionné
+  const getCountryCode = (pays: string) => {
+    const paysData = PAYS_OPTIONS.find(p => p.value === pays);
+    return paysData ? paysData.code : '+212';
   };
 
-  const vehicles = [
-    'Dacia Sandero',
-    'Dacia Duster 4x4',
-    'BMW Série 3',
-    'Dacia Lodgy 7 places',
-    'Autre véhicule'
-  ];
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     });
+
+    // 📅 Gestion dynamique des dates
+    if (name === 'dateDebut') {
+      const dateFinInput = document.getElementById('dateFin') as HTMLInputElement;
+      if (dateFinInput) {
+        dateFinInput.min = value;
+        // Réinitialiser la date de fin si elle est antérieure à la nouvelle date de début
+        if (formData.dateFin && formData.dateFin <= value) {
+          setFormData(prev => ({
+            ...prev,
+            [name]: value,
+            dateFin: ''
+          }));
+        }
+      }
+    }
   };
 
   const handleSelectChange = (field: string, value: string) => {
@@ -126,7 +177,7 @@ const SimpleContactForm = () => {
       // URL de déploiement Google Apps Script - REMPLACEZ PAR VOTRE URL
       const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz4f0Ue2o18F7lVHolmNWn7uU1t_0UFHD1WGiqPFZMqm5K9qSks8YAdb8wHmvtjVh_j/exec';
       
-      const indicatif = countryCodeMap[formData.pays as keyof typeof countryCodeMap] || '';
+      const indicatif = getCountryCode(formData.pays);
       const whatsappComplet = `${indicatif}${formData.whatsapp}`;
       
       const dataToSend = {
@@ -212,7 +263,7 @@ const SimpleContactForm = () => {
   };
 
   const handleWhatsAppContact = () => {
-    const indicatif = countryCodeMap[formData.pays as keyof typeof countryCodeMap] || '';
+    const indicatif = getCountryCode(formData.pays);
     const whatsappComplet = `${indicatif}${formData.whatsapp}`;
     
     const message = `🚗 DEMANDE DE RÉSERVATION
@@ -290,9 +341,9 @@ const SimpleContactForm = () => {
                       <SelectValue placeholder="Sélectionnez votre pays" />
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.keys(countryCodeMap).map((pays) => (
-                        <SelectItem key={pays} value={pays}>
-                          {pays} {countryCodeMap[pays as keyof typeof countryCodeMap]}
+                      {PAYS_OPTIONS.map((pays) => (
+                        <SelectItem key={pays.value} value={pays.value}>
+                          {pays.text}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -303,7 +354,7 @@ const SimpleContactForm = () => {
                   <div className="flex">
                     <div className="flex items-center px-3 bg-muted rounded-l-md border border-r-0 h-12">
                       <span className="text-sm font-medium">
-                        {countryCodeMap[formData.pays as keyof typeof countryCodeMap] || '+212'}
+                        {getCountryCode(formData.pays)}
                       </span>
                     </div>
                     <Input
@@ -328,9 +379,9 @@ const SimpleContactForm = () => {
                       <SelectValue placeholder="Choisir un véhicule" />
                     </SelectTrigger>
                     <SelectContent>
-                      {vehicles.map((vehicle) => (
-                        <SelectItem key={vehicle} value={vehicle}>
-                          {vehicle}
+                      {VEHICULE_OPTIONS.filter(v => v.value !== '').map((vehicle) => (
+                        <SelectItem key={vehicle.value} value={vehicle.value}>
+                          {vehicle.text}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -369,12 +420,11 @@ const SimpleContactForm = () => {
                     <SelectValue placeholder="Sélectionnez un transfert" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="aeroport">Aéroport Mohammed V</SelectItem>
-                    <SelectItem value="hotel">Hôtel / Riad</SelectItem>
-                    <SelectItem value="domicile">Domicile</SelectItem>
-                    <SelectItem value="gare">Gare</SelectItem>
-                    <SelectItem value="autre">Autre lieu</SelectItem>
-                    <SelectItem value="aucun">Aucun transfert</SelectItem>
+                    {TRANSFERT_OPTIONS.filter(t => t.value !== '').map((transfert) => (
+                      <SelectItem key={transfert.value} value={transfert.value}>
+                        {transfert.text}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -397,8 +447,17 @@ const SimpleContactForm = () => {
                   disabled={isSubmitting}
                   className="flex-1 h-12 bg-primary hover:bg-primary/90"
                 >
-                  <Send className="w-4 h-4 mr-2" />
-                  {isSubmitting ? 'Envoi...' : 'Envoyer la demande'}
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Envoi en cours...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4 mr-2" />
+                      📤 Envoyer la réservation
+                    </>
+                  )}
                 </Button>
                 
                 <Button 
