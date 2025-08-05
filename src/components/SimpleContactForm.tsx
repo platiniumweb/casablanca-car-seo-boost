@@ -46,7 +46,7 @@ const TRANSFERT_OPTIONS = [
 ];
 
 // URL de l'Edge Function Supabase
-const SUPABASE_FUNCTION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-reservation-email`;
+const SUPABASE_FUNCTION_URL = 'https://jgftmsogceyfysbjqnnr.supabase.co/functions/v1/send-reservation-email';
 
 const SimpleContactForm = () => {
   const { toast } = useToast();
@@ -199,7 +199,7 @@ const SimpleContactForm = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpnZnRtc29nY2V5ZnlzYmpxbm5yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0MTk0MTcsImV4cCI6MjA2OTk5NTQxN30.4Vp9vu9pqSdbTPJs1waGAy6z6iirfrCervORZ_E1Dug`,
         },
         body: JSON.stringify(dataToSend)
       });

@@ -14,7 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      reservations: {
+        Row: {
+          created_at: string
+          date_debut: string
+          date_fin: string
+          email: string
+          id: string
+          message: string | null
+          nom: string
+          pays: string
+          prenom: string
+          transfert: string | null
+          updated_at: string
+          vehicule: string
+          whatsapp: string
+        }
+        Insert: {
+          created_at?: string
+          date_debut: string
+          date_fin: string
+          email: string
+          id?: string
+          message?: string | null
+          nom: string
+          pays: string
+          prenom: string
+          transfert?: string | null
+          updated_at?: string
+          vehicule: string
+          whatsapp: string
+        }
+        Update: {
+          created_at?: string
+          date_debut?: string
+          date_fin?: string
+          email?: string
+          id?: string
+          message?: string | null
+          nom?: string
+          pays?: string
+          prenom?: string
+          transfert?: string | null
+          updated_at?: string
+          vehicule?: string
+          whatsapp?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
