@@ -45,8 +45,8 @@ const TRANSFERT_OPTIONS = [
   { value: 'Aucun transfert', text: 'Aucun transfert' }
 ];
 
-// URL Google Apps Script
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz4f0Ue2o18F7lVHolmNWn7uU1t_0UFHD1WGiqPFZMqm5K9qSks8YAdb8wHmvtjVh_j/exec';
+// URL de l'Edge Function Supabase
+const SUPABASE_FUNCTION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-reservation-email`;
 
 const SimpleContactForm = () => {
   const { toast } = useToast();
@@ -174,8 +174,8 @@ const SimpleContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      // URL de déploiement Google Apps Script - REMPLACEZ PAR VOTRE URL
-      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz4f0Ue2o18F7lVHolmNWn7uU1t_0UFHD1WGiqPFZMqm5K9qSks8YAdb8wHmvtjVh_j/exec';
+      // URL de l'Edge Function Supabase
+      const functionUrl = SUPABASE_FUNCTION_URL;
       
       const indicatif = getCountryCode(formData.pays);
       const whatsappComplet = `${indicatif}${formData.whatsapp}`;
@@ -195,10 +195,11 @@ const SimpleContactForm = () => {
 
       console.log('Envoi des données:', dataToSend);
 
-      const response = await fetch(GOOGLE_SCRIPT_URL, {
+      const response = await fetch(functionUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
         },
         body: JSON.stringify(dataToSend)
       });
