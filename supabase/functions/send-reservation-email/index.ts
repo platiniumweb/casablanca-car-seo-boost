@@ -78,7 +78,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         success: true, 
-        message: 'Réservation enregistrée avec succès. Un email de confirmation a été envoyé et nous vous contacterons dans les 24 heures.',
+        message: 'Votre demande de réservation a été reçue et enregistrée. Nous vous contacterons dans les 24 heures pour confirmer tous les détails de votre réservation.',
         reservationId: reservationData.id 
       }),
       { 

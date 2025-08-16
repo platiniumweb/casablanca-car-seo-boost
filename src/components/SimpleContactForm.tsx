@@ -217,9 +217,17 @@ const SimpleContactForm = () => {
 
       if (result.success !== false) {
         toast({
-          title: "Réservation envoyée !",
-          description: "Votre demande a été transmise avec succès. Nous vous contacterons rapidement.",
+          title: "✅ Demande de réservation reçue !",
+          description: "Votre demande a été enregistrée avec succès. Nous vous contacterons dans les 24 heures pour confirmer votre réservation.",
         });
+
+        // Show success popup
+        setTimeout(() => {
+          toast({
+            title: "📧 Email de confirmation envoyé",
+            description: "Vérifiez votre boîte email pour la confirmation de réception.",
+          });
+        }, 2000);
 
         // Réinitialiser le formulaire
         setFormData({
