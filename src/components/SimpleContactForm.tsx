@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Send, MessageCircle, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 // 🌍 CODES PAYS AVEC INDICATIFS
 const PAYS_OPTIONS = [
@@ -45,8 +46,6 @@ const TRANSFERT_OPTIONS = [
   { value: 'Aucun transfert', text: 'Aucun transfert' }
 ];
 
-// URL de l'Edge Function Supabase
-const SUPABASE_FUNCTION_URL = 'https://jgftmsogceyfysbjqnnr.supabase.co/functions/v1/send-reservation-email';
 
 const SimpleContactForm = () => {
   const { toast } = useToast();
@@ -174,9 +173,6 @@ const SimpleContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      // URL de l'Edge Function Supabase
-      const functionUrl = SUPABASE_FUNCTION_URL;
-      
       const indicatif = getCountryCode(formData.pays);
       const whatsappComplet = `${indicatif}${formData.whatsapp}`;
       
@@ -195,27 +191,15 @@ const SimpleContactForm = () => {
 
       console.log('Envoi des données:', dataToSend);
 
-      const response = await fetch(functionUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpnZnRtc29nY2V5ZnlzYmpxbm5yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0MTk0MTcsImV4cCI6MjA2OTk5NTQxN30.4Vp9vu9pqSdbTPJs1waGAy6z6iirfrCervORZ_E1Dug`,
-        },
-        body: JSON.stringify(dataToSend)
+      const { data: result, error } = await supabase.functions.invoke('send-reservation-email', {
+        body: dataToSend
       });
 
-      // Tenter de lire la réponse JSON
-      let result;
-      try {
-        const responseText = await response.text();
-        console.log('Réponse brute:', responseText);
-        result = JSON.parse(responseText);
-      } catch (parseError) {
-        console.warn('Impossible de parser la réponse JSON, mais requête envoyée');
-        result = { success: true }; // Considérer comme succès si pas d'erreur réseau
+      if (error) {
+        throw error;
       }
 
-      if (result.success !== false) {
+      if (result?.success !== false) {
         toast({
           title: "✅ Demande de réservation reçue !",
           description: "Votre demande a été enregistrée avec succès. Nous vous contacterons dans les 24 heures pour confirmer votre réservation.",
